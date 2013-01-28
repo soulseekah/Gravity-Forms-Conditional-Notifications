@@ -53,7 +53,7 @@
 				return $disable; /* no conditions to play around with */
 
 			/* Check whether conditions inside of this form are valid */
-			if ( !self::conditions_valid( &$form['fields'], &$form['notification_conditions'] ) ) return $disable;
+			if ( !self::conditions_valid( $form['fields'], $form['notification_conditions'] ) ) return $disable;
 
 			/* Look for a condition that matches */
 			foreach ( $form['notification_conditions'] as $condition ) {
@@ -100,7 +100,7 @@
             if( sizeof($forms) == 0 ) {
                 ?>
                     <div style="margin:50px 0 0 10px;">
-	                   <?php echo sprintf(__("You don't have any active forms. Let's go %screate one%s", "gravityforms"), '<a href="?page=gravityforms.php&id=0">', '</a>'); ?>
+	                   <?php echo sprintf(__("You don't have any active forms. Let's go %screate one%s", "gravityforms"), '<a href="?page=gf_new_form">', '</a>'); ?>
                     </div>
                 <?php
                 return;
@@ -290,6 +290,8 @@
 			/* Process a save request */
 			if ( !isset($_POST['gfcn_submit']) ) return;
 			check_admin_referer( 'gfcn_save_notifications', 'gfcn_admin_nonce' );
+
+			$_POST = stripslashes_deep( $_POST ); /* Remove the slashes added by WordPress */
 
 			$form_id = isset( $_POST['gfcn_form_id'] ) ? intval( $_POST['gfcn_form_id'] ) : 0;
 			if ( $form_id <= 0 ) return; /* an invalid form id? */
